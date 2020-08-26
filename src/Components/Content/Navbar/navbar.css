@@ -1,0 +1,19 @@
+.navbar {
+    float: left;
+    padding: 10px;
+    width: 25%;
+    background: #097a7a;
+    font-weight: lighter;
+    font-size: 1.5rem;
+  }
+  .navbar a {
+    text-decoration: none;
+    color: antiquewhite;
+  }
+  .navbar :hover a {
+    color: rgb(235, 199, 151);
+  }
+  .navbar .active {
+    color: rgb(235, 199, 151);
+  }
+  

@@ -1,0 +1,26 @@
+.App-header {
+  background-color: #097a7a;
+  height: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: antiquewhite;
+  border-bottom: 3px solid;
+  border-radius: 3px;
+  padding: 10px;
+}
+.loginItem {
+  float: right;
+  color: antiquewhite;
+}
+.loginItem a {
+  text-decoration: none;
+  color: antiquewhite;
+}
+.loginItem a:hover {
+  color: rgb(235, 199, 151);
+}
+header {
+  float: left;
+}

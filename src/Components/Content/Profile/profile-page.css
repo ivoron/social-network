@@ -1,0 +1,33 @@
+.pageCover {
+    width: 100%;
+    background-color: lightgoldenrodyellow;
+  }
+  .profileInfo {
+    display: flex;
+  }
+  .pagePhoto {
+    padding: 5px;
+    margin: 0;
+    float: left;
+    width: 50%;
+  }
+  .info {
+    float: left;
+    color: rgb(29, 1, 1);
+  }
+  .pagePhoto img {
+    border-radius: 10px;
+  }
+  .editStatus {
+    color: darkgrey;
+  }
+  .trueStatus {
+    display: inline-block;
+    background: floralwhite;
+    border: 1px solid thistle;
+    border-radius: 3px;
+    padding: 0 5px;
+  }
+  #warning:focus {
+    border: 3px solid red;
+  }

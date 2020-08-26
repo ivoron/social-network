@@ -1,0 +1,41 @@
+.dialogs {
+  padding-left: 10px;
+}
+.chatItems {
+  width: 30%;
+  border-right: 2px solid #097a7a;
+  float: left;
+}
+.chatItems a {
+  text-decoration: none;
+  color: darkslategrey;
+}
+.chatItems li {
+  list-style: none;
+  margin-top: 5px;
+}
+.chatItems ul {
+  padding: 0;
+}
+.chatItems li:hover {
+  color: black;
+  background: lightcyan;
+  border-bottom: 1px solid thistle;
+}
+.chatBody {
+  float: left;
+  padding-left: 10px;
+}
+.chatField {
+  border: 1px solid seashell;
+  background: seashell;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px;
+}
+.chatField span {
+  border-radius: 5px;
+  background: #fff;
+  padding: 1px;
+}

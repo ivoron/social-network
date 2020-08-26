@@ -1,0 +1,58 @@
+.userItem {
+  max-width: 800px;
+  margin: 10px 0 0 10px;
+  background: lightgoldenrodyellow;
+  border: 1px solid burlywood;
+  display: flex;
+  padding: 5px;
+  border-radius: 10px;
+}
+.userPhoto {
+  width: 90px;
+  height: 90px;
+  float: left;
+  margin-right: 15px;
+}
+.userPhoto img {
+  border-radius: 50%;
+  height: 90px;
+  width: 90px;
+  border: 1px solid burlywood;
+}
+.userInfo {
+  float: left;
+}
+.userInfo button {
+  margin-right: 5px;
+  background: wheat;
+  border: 0.5px solid silver;
+  border-radius: 8px;
+}
+#followBtn {
+  width: 65px;
+}
+.userInfo button:hover {
+  background: whitesmoke;
+}
+#currentPage {
+  font-weight: bold;
+  background: #fff;
+  color: #097a7a;
+  border: 2px solid #097a7a;
+  margin: 0 3px;
+}
+#pagination {
+  text-align: center;
+  margin: 5px;
+}
+#skipBTN {
+  margin: 0 5px;
+  background: #097a7a;
+  color: #fff;
+  border: 1 solid lightgray;
+  border-radius: 3px;
+}
+#skipBTN:hover {
+  color: black;
+  background: transparent;
+}

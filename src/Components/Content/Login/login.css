@@ -1,0 +1,13 @@
+.loginForm {
+    margin: 20px 10%;
+  }
+  .loginForm input {
+    margin: 3px;
+  }
+  .warningField #warning {
+    border: 2px solid red;
+  }
+  .warningField span {
+    margin-left: 15px;
+    color: red;
+  }
