@@ -38,9 +38,17 @@ export const setStatus = (status) => {
 };
 export const getLogin = (email, password, rememberMe = false) => {
   let url = "auth/login";
-  return axiosFetch.post(url, {email, password, rememberMe})
-}
+  return axiosFetch.post(url, { email, password, rememberMe });
+};
 export const getLogOut = () => {
   let url = "auth/login";
-  return axiosFetch.delete(url)
-}
+  return axiosFetch.delete(url);
+};
+export const uploadPhoto = (photo) => {
+  let url = "profile/photo";
+  const formData = new FormData();
+  formData.append("image", photo);
+  return axiosFetch
+    .put(url, formData)
+    .then((response) => response.data);
+};

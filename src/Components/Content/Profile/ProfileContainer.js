@@ -5,10 +5,11 @@ import {
   getPropfileThunk,
   setStatusThunk,
   getStatusThunk,
+  setProfilePhoto,
 } from "../../../Store/profileReducer";
 import { withRouter } from "react-router-dom";
 import withRedirect from "../../../HOC/withRedirect";
-import "./profile-page.css"
+import "./profile-page.css";
 import { compose } from "redux";
 
 class ProfileAPI extends React.Component {
@@ -21,10 +22,14 @@ class ProfileAPI extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.id !== this.props.match.params.id) {
-      let myProfile = this.props.myProfile;
-      getPropfileThunk(myProfile);
-      getStatusThunk(myProfile);
+      let myID = this.props.myProfile;
+      const { getPropfileThunk, getStatusThunk } = this.props;
+      getPropfileThunk(myID);
+      getStatusThunk(myID);
     }
+    // if (prevProps.profile.photos !== this.props.profile.photos) {
+    //   this.props.getPropfileThunk(this.props.myProfile);
+    // }
   }
   render() {
     return (
@@ -32,8 +37,10 @@ class ProfileAPI extends React.Component {
         profile={this.props.profile}
         status={this.props.status}
         setStatus={this.props.setStatusThunk}
-        myID={this.props.myID}
-        userID={this.props.userID}
+        isMyPage={this.props.myID === this.props.userID}
+        setProfilePhoto={this.props.setProfilePhoto}
+        // myID={this.props.myID}
+        // userID={this.props.userID}
       />
     );
   }
@@ -51,6 +58,7 @@ export default compose(
     getPropfileThunk,
     getStatusThunk,
     setStatusThunk,
+    setProfilePhoto,
   }),
   withRedirect,
   withRouter

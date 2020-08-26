@@ -1,4 +1,4 @@
-import { getProfile, getStatus, setStatus } from "../API/getApi";
+import { getProfile, getStatus, setStatus, uploadPhoto } from "../API/getApi";
 
 let initialState = {
   profile: {
@@ -48,6 +48,8 @@ const profileReducer = (state = initialState, action) => {
       return { ...state, status: action.id };
     case "SET-STATUS":
       return { ...state, status: action.status };
+    case "ADD-USER-PHOTO":
+      return { ...state, profile: { ...state.profile, photos: action.photos } };
     default:
       return state;
   }
@@ -55,7 +57,7 @@ const profileReducer = (state = initialState, action) => {
 export const setProfile = (profile) => ({ type: "SET-PROFILE", profile });
 export const setCurrentID = (id) => ({ type: "SET-CURRENT-ID", id });
 export const addPostAC = (post) => ({ type: "ADD-POST", post });
-
+export const addPhoto = (photos) => ({ type: "ADD-USER-PHOTO", photos });
 export const getStatusAC = (id) => ({ type: "GET-STATUS", id });
 export const setStatusAC = (status) => ({ type: "SET-STATUS", status });
 
@@ -79,5 +81,12 @@ export const setStatusThunk = (status) => (dispatch) => {
 };
 export const addPost = (post) => (dispatch) => {
   dispatch(addPostAC(post));
+};
+export const setProfilePhoto = (photo) => (dispatch) => {
+  uploadPhoto(photo).then((response) => {
+    if (response.data.resultCode === 0) {
+      dispatch(addPhoto(response.data.photos));
+    }
+  });
 };
 export default profileReducer;
