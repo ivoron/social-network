@@ -6,6 +6,7 @@ import {
   setStatusThunk,
   getStatusThunk,
   setProfilePhoto,
+  setProfileData,
 } from "../../../Store/profileReducer";
 import { withRouter } from "react-router-dom";
 import withRedirect from "../../../HOC/withRedirect";
@@ -27,9 +28,6 @@ class ProfileAPI extends React.Component {
       getPropfileThunk(myID);
       getStatusThunk(myID);
     }
-    // if (prevProps.profile.photos !== this.props.profile.photos) {
-    //   this.props.getPropfileThunk(this.props.myProfile);
-    // }
   }
   render() {
     return (
@@ -39,8 +37,7 @@ class ProfileAPI extends React.Component {
         setStatus={this.props.setStatusThunk}
         isMyPage={this.props.myID === this.props.userID}
         setProfilePhoto={this.props.setProfilePhoto}
-        // myID={this.props.myID}
-        // userID={this.props.userID}
+        setProfileData={this.props.setProfileData}
       />
     );
   }
@@ -59,6 +56,7 @@ export default compose(
     getStatusThunk,
     setStatusThunk,
     setProfilePhoto,
+    setProfileData,
   }),
   withRedirect,
   withRouter

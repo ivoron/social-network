@@ -4,23 +4,27 @@ import React from "react";
 const ProfileStatus = (props) => {
   let [editMode, setEditMode] = useState(false);
   let [status, setStatus] = useState(props.status);
-  let [error, setError] = useState(false)
-  let msg = `Maximum length is 300 symbols, now ${status? status.length: null}`
-    useEffect(()=> {
-        setStatus(props.status)
-    }, [props.status])
+  let [error, setError] = useState(false);
+  let msg = `Maximum length is 300 symbols, now ${
+    status ? status.length : null
+  }`;
+  useEffect(() => {
+    setStatus(props.status);
+  }, [props.status]);
   const editStatus = () => {
     setEditMode(true);
   };
   const seveStatus = () => {
     setEditMode(false);
-    props.setStatus(status)
+    props.setStatus(status);
   };
   const changeStatus = (e) => {
     setStatus(e.target.value);
     if (status.length > 298) {
-        setError(true)
-    } else {setError(false)}
+      setError(true);
+    } else {
+      setError(false);
+    }
   };
   return (
     <div>
@@ -48,4 +52,4 @@ const ProfileStatus = (props) => {
     </div>
   );
 };
-export default ProfileStatus
+export default ProfileStatus;

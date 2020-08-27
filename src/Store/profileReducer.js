@@ -1,4 +1,11 @@
-import { getProfile, getStatus, setStatus, uploadPhoto } from "../API/getApi";
+import {
+  getProfile,
+  getStatus,
+  setStatus,
+  uploadPhoto,
+  setProfileInfo,
+} from "../API/getApi";
+import { stopSubmit } from "redux-form";
 
 let initialState = {
   profile: {
@@ -11,6 +18,7 @@ let initialState = {
     aboutMe: "its me",
     contacts: {},
   },
+  successUpdating: null,
   status: "",
   currentID: 10925,
   postText: [
@@ -20,7 +28,7 @@ let initialState = {
 };
 
 const profileReducer = (state = initialState, action) => {
-  console.log(action);
+  console.log(action)
   switch (action.type) {
     case "SET-PROFILE":
       return {
@@ -46,6 +54,8 @@ const profileReducer = (state = initialState, action) => {
       return state;
     case "GET-STATUS":
       return { ...state, status: action.id };
+    case "UPDATE-SUCCESS":
+      return {...state, successUpdating: action.result}
     case "SET-STATUS":
       return { ...state, status: action.status };
     case "ADD-USER-PHOTO":
@@ -59,7 +69,8 @@ export const setCurrentID = (id) => ({ type: "SET-CURRENT-ID", id });
 export const addPostAC = (post) => ({ type: "ADD-POST", post });
 export const addPhoto = (photos) => ({ type: "ADD-USER-PHOTO", photos });
 export const getStatusAC = (id) => ({ type: "GET-STATUS", id });
-export const setStatusAC = (status) => ({ type: "SET-STATUS", status });
+export const setStatusAC = (status) => ({ type: "SET-STATUS", status});
+const updateSuccess = (result) => ({type:"UPDATE-SUCCESS", result }) 
 
 export const getPropfileThunk = (id) => (dispatch) => {
   getProfile(id).then((data) => {
@@ -89,4 +100,16 @@ export const setProfilePhoto = (photo) => (dispatch) => {
     }
   });
 };
+export const setProfileData = (profileData) => async (dispatch, getState) => {
+  let id = getState().auth.id;
+  let response = await setProfileInfo(profileData)
+    if (response.data.resultCode === 0) {
+      dispatch(getPropfileThunk(id));
+    } else {
+      let message = response.data.messages[0];
+      dispatch(stopSubmit("profile-editor", { _error: message }));
+      return Promise.reject(message);
+    }
+};
+
 export default profileReducer;
