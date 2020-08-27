@@ -13,7 +13,7 @@ const Contact = ({ contactKey, contactValue }) => {
     </div>
   );
 };
-export const ProfileData = ({ profile, contacts, editProfile }) => {
+export const ProfileData = ({ profile, contacts, editProfile, isMyPage }) => {
   return (
     <>
       <hr />
@@ -26,11 +26,11 @@ export const ProfileData = ({ profile, contacts, editProfile }) => {
           <Contact key={key} contactValue={contacts[key]} contactKey={contacts[key]} />
         ))}
       </div>
-      <button onClick={editProfile}>edit</button>
+      {isMyPage && <button onClick={editProfile}>edit</button>}
     </>
   );
 };
-const DataFormEditor = ({ profile, contacts, handleSubmit, error }) => {
+const DataFormEditor = ({ contacts, handleSubmit, error }) => {
   return (
     <form onSubmit={handleSubmit}>
       <span>Name:</span>

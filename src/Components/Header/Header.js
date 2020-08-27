@@ -14,7 +14,7 @@ export default function Header(props) {
       <div className="loginItem">
         {props.isAuth ? (
           <>
-            <NavLink to="/profile/">{props.login} </NavLink>|
+            <NavLink to="/profile/">{props.userName} </NavLink>|
             <NavLink onClick={()=> props.logOutThunk()} to="#"> exit</NavLink>
           </>
         ) : (

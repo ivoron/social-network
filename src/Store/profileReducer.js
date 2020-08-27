@@ -18,7 +18,6 @@ let initialState = {
     aboutMe: "its me",
     contacts: {},
   },
-  successUpdating: null,
   status: "",
   currentID: 10925,
   postText: [
@@ -28,7 +27,6 @@ let initialState = {
 };
 
 const profileReducer = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case "SET-PROFILE":
       return {

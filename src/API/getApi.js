@@ -36,9 +36,13 @@ export const setStatus = (status) => {
   let url = "profile/status/";
   return axiosFetch.put(url, { status });
 };
-export const getLogin = (email, password, rememberMe = false) => {
+export const getLogin = (email, password, rememberMe = false, captcha = null) => {
   let url = "auth/login";
-  return axiosFetch.post(url, { email, password, rememberMe });
+  return axiosFetch.post(url, { email, password, rememberMe, captcha });
+};
+export const getCaptcha = () => {
+  let url = "security/get-captcha-url";
+  return axiosFetch.get(url).then((response) => response.data);
 };
 export const getLogOut = () => {
   let url = "auth/login";
@@ -48,11 +52,9 @@ export const uploadPhoto = (photo) => {
   let url = "profile/photo";
   const formData = new FormData();
   formData.append("image", photo);
-  return axiosFetch
-    .put(url, formData)
-    .then((response) => response.data);
+  return axiosFetch.put(url, formData).then((response) => response.data);
 };
 export const setProfileInfo = (profileData) => {
   let url = "profile";
-  return axiosFetch.put(url, profileData)
-}
+  return axiosFetch.put(url, profileData);
+};

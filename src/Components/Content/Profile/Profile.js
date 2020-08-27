@@ -51,6 +51,7 @@ export default function Profile(props) {
               profile={profile}
               contacts={contacts}
               editProfile={editProfile}
+              isMyPage={props.isMyPage}
             />
           )}
         </div>
