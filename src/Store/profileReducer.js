@@ -52,8 +52,6 @@ const profileReducer = (state = initialState, action) => {
       return state;
     case "GET-STATUS":
       return { ...state, status: action.id };
-    case "UPDATE-SUCCESS":
-      return {...state, successUpdating: action.result}
     case "SET-STATUS":
       return { ...state, status: action.status };
     case "ADD-USER-PHOTO":
@@ -67,8 +65,7 @@ export const setCurrentID = (id) => ({ type: "SET-CURRENT-ID", id });
 export const addPostAC = (post) => ({ type: "ADD-POST", post });
 export const addPhoto = (photos) => ({ type: "ADD-USER-PHOTO", photos });
 export const getStatusAC = (id) => ({ type: "GET-STATUS", id });
-export const setStatusAC = (status) => ({ type: "SET-STATUS", status});
-const updateSuccess = (result) => ({type:"UPDATE-SUCCESS", result }) 
+export const setStatusAC = (status) => ({ type: "SET-STATUS", status });
 
 export const getPropfileThunk = (id) => (dispatch) => {
   getProfile(id).then((data) => {
@@ -91,23 +88,27 @@ export const setStatusThunk = (status) => (dispatch) => {
 export const addPost = (post) => (dispatch) => {
   dispatch(addPostAC(post));
 };
-export const setProfilePhoto = (photo) => (dispatch) => {
+export const setProfilePhoto = (photo) => (dispatch, getState) => {
+  let id = getState().auth.id;
   uploadPhoto(photo).then((response) => {
+    console.log(response)
     if (response.data.resultCode === 0) {
-      dispatch(addPhoto(response.data.photos));
+      dispatch(addPhoto(response.data));
+      dispatch(getPropfileThunk(id));
+      
     }
   });
 };
 export const setProfileData = (profileData) => async (dispatch, getState) => {
   let id = getState().auth.id;
-  let response = await setProfileInfo(profileData)
-    if (response.data.resultCode === 0) {
-      dispatch(getPropfileThunk(id));
-    } else {
-      let message = response.data.messages[0];
-      dispatch(stopSubmit("profile-editor", { _error: message }));
-      return Promise.reject(message);
-    }
+  let response = await setProfileInfo(profileData);
+  if (response.data.resultCode === 0) {
+    dispatch(getPropfileThunk(id));
+  } else {
+    let message = response.data.messages[0];
+    dispatch(stopSubmit("profile-editor", { _error: message }));
+    return Promise.reject(message);
+  }
 };
 
 export default profileReducer;

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import userPic from "../../../assets/images/Cats.jpg";
-// import ProfileStatus from "./ProfileStatus";
 import PropfileStatus from "./StatusHooks";
-import { ContactEditor, ProfileData } from "./ProfileData";
+import { ProfileEditor, ProfileData } from "./ProfileData";
 
 export default function Profile(props) {
   let { profile } = props;
@@ -19,7 +18,6 @@ export default function Profile(props) {
       setEditMode(false);
     });
   };
-
   return (
     <div className="pageCover">
       <div className="profileInfo">
@@ -33,15 +31,13 @@ export default function Profile(props) {
         </div>
         <div className="info">
           <h3>{profile.fullName}</h3>
-          {/* <ProfileStatus status={props.status} setStatus={props.setStatus}/> */}
           {props.isMyPage ? (
             <PropfileStatus status={props.status} setStatus={props.setStatus} />
           ) : (
             <span>{props.status ? props.status : "no status"}</span>
           )}
           {editMode ? (
-            <ContactEditor
-              profile={profile}
+            <ProfileEditor
               initialValues={profile}
               contacts={contacts}
               onSubmit={onSubmit}

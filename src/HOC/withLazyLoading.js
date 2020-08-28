@@ -2,7 +2,7 @@ import React from "react";
 import Preloader from "../assets/Preloader/Preloader";
 const LazyLoading = (Component) => {
   return (
-    <React.Suspense fallback={Preloader}>
+    <React.Suspense fallback={<Preloader/>}>
       <Component />
     </React.Suspense>
   );

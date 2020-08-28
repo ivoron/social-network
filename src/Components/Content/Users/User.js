@@ -3,16 +3,13 @@ import pic from "../../../assets/images/cat1.jpg";
 import { NavLink } from "react-router-dom";
 
 export default function User(props) {
-let {user} = props
-  let path = "/profile/" + user.id;
+  const { user } = props;
+  const path = "/profile/" + user.id;
   return (
     <div className="userItem">
       <div className="userPhoto">
         <NavLink to={path}>
-          <img
-            src={user.photos.small || pic}
-            alt="user pic"
-          />
+          <img src={user.photos.small || pic} alt="user pic" />
         </NavLink>
       </div>
       <div className="userInfo">
@@ -22,11 +19,7 @@ let {user} = props
         <p />
         <button
           id="followBtn"
-          onClick={
-            user.followed
-              ? () => props.unfollow(user.id)
-              : () => props.follow(user.id)
-          }
+          onClick={() => props.followTrack(user.id, user.followed)}
           disabled={props.followFetch.some((id) => id === user.id)}
         >
           {user.followed ? "unfollow" : "follow"}

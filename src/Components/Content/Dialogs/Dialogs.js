@@ -25,7 +25,7 @@ export default function Dialogs(props) {
     );
   };
   const MessageForm = reduxForm({
-    form: "add-message",
+    form: "send-message",
   })(AddMessageForm);
   const sendMessage = (message) => {
     props.sendMessage(message.message);

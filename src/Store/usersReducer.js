@@ -7,7 +7,7 @@ let initialState = {
       name: "Ilya Voronov",
       status: "hey there!",
       photos: { small: null, large: null },
-    }
+    },
   ],
   currentPage: 1,
   totalCount: null,
@@ -98,21 +98,12 @@ export const getUsersThunk = (currentPage, pageSize) => (dispatch) => {
     dispatch(setLoader(false));
   });
 };
-export const followThunk = (id) => (dispatch) => {
+export const followTrack = (id, followed) => (dispatch) => {
   dispatch(followedToggle(true, id));
-  followUser(id).then((data) => {
+  (followed ? unfollowUser(id) : followUser(id)).then((data) => {
     dispatch(followedToggle(false, id));
     if (data.resultCode === 0) {
-      dispatch(follow(id));
-    }
-  });
-};
-export const unfollowThunk = (id) => (dispatch) => {
-  dispatch(followedToggle(true, id));
-  unfollowUser(id).then((data) => {
-    dispatch(followedToggle(false, id));
-    if (data.resultCode === 0) {
-      dispatch(unfollow(id));
+      dispatch(followed ? unfollow(id) : follow(id));
     }
   });
 };

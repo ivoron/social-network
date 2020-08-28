@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../Content/Navbar/Navbar";
 import Preloader from "../../assets/Preloader/Preloader";
 import ProfilePage from "./Profile/ProfilePage";
-import { Route, withRouter } from "react-router-dom";
+import { Route, withRouter, Redirect, Switch } from "react-router-dom";
 import { initialApp } from "../../Store/appReducer";
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -11,6 +11,7 @@ import LazyLoading from "../../HOC/withLazyLoading";
 const Login = React.lazy(() => import("./Login/Login"));
 const DialogsContainer = React.lazy(() => import("./Dialogs/DialogsContainer"));
 const UsersContainer = React.lazy(() => import("./Users/UsersContainer"));
+const Page404 = React.lazy(() => import("./Page404"));
 
 class Content extends React.Component {
   componentDidMount() {
@@ -23,11 +24,18 @@ class Content extends React.Component {
     return (
       <div className="container">
         <Navbar />
-        <div className="body">  
-          <Route path="/profile/:id?" render={() => <ProfilePage />} />
-          <Route path="/dialogs" render={() => LazyLoading(DialogsContainer)} />
-          <Route path="/users" render={() => LazyLoading(UsersContainer)} />
-          <Route path="/login" render={() => LazyLoading(Login)} />
+        <div className="body">
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to={"/profile"} />} />
+            <Route path="/profile/:id?" render={() => <ProfilePage />} />
+            <Route
+              path="/dialogs"
+              render={() => LazyLoading(DialogsContainer)}
+            />
+            <Route path="/users" render={() => LazyLoading(UsersContainer)} />
+            <Route path="/login" render={() => LazyLoading(Login)} />
+            <Route path="*" render={() => LazyLoading(Page404)} />
+          </Switch>
         </div>
       </div>
     );

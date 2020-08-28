@@ -8,11 +8,10 @@ export default function Users(props) {
     <User
       key={user.id}
       user={user}
-      unfollow={props.unfollow}
       setCurrentID={props.setCurrentID}
       followedToggle={props.followedToggle}
-      follow={props.follow}
       followFetch={props.followFetch}
+      followTrack={props.followTrack}
     />
   ));
   const pagination = (

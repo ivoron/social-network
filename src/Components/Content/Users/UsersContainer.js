@@ -2,8 +2,7 @@ import React from "react";
 import {
   setCurrentPage,
   getUsersThunk,
-  followThunk,
-  unfollowThunk,
+  followTrack
 } from "../../../Store/usersReducer";
 import { setCurrentID } from "../../../Store/profileReducer";
 import withRedirect from "../../../HOC/withRedirect";
@@ -23,19 +22,10 @@ class UsersAPI extends React.Component {
     this.props.setCurrentPage(page);
     this.props.getUsersThunk(page, this.props.pageSize);
   };
-  follow = (id) => {
-    this.props.followThunk(id);
-  };
-  unfollow = (id) => {
-    this.props.unfollowThunk(id);
-  };
-
   render() {
     return (
       <Users
         users={this.props.users}
-        follow={this.follow}
-        unfollow={this.unfollow}
         changePage={this.changePage}
         pageSize={this.props.pageSize}
         totalCount={this.props.totalCount}
@@ -43,6 +33,7 @@ class UsersAPI extends React.Component {
         isLoading={this.props.isLoading}
         setCurrentID={this.props.setCurrentID}
         followFetch={this.props.followFetch}
+        followTrack={this.props.followTrack}
       />
     );
   }
@@ -63,8 +54,7 @@ export default compose(
     setCurrentPage,
     setCurrentID,
     getUsersThunk,
-    followThunk,
-    unfollowThunk,
+    followTrack
   }),
   withRedirect
 )(UsersAPI);

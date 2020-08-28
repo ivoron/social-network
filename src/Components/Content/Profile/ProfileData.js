@@ -44,7 +44,7 @@ const DataFormEditor = ({ contacts, handleSubmit, error }) => {
       <Field
         validate={[]}
         name={"aboutMe"}
-        component={Input}
+        component={"textarea"}  //вместо инпута
         placeholder={"about me"}
       />
       <label style={{ marginRight: 23 }}>
@@ -56,7 +56,7 @@ const DataFormEditor = ({ contacts, handleSubmit, error }) => {
       <Field
         validate={[]}
         name={"lookingForAJobDescription"}
-        component={Input}
+        component={"textarea"} //вместо инпута
         placeholder={"your professional skills"}
       />
       <span>contacts:</span>
@@ -74,6 +74,6 @@ const DataFormEditor = ({ contacts, handleSubmit, error }) => {
     </form>
   );
 };
-export const ContactEditor = reduxForm({ form: "profile-editor" })(
+export const ProfileEditor = reduxForm({ form: "profile-editor" })(
   DataFormEditor
 );

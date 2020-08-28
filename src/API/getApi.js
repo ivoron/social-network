@@ -52,7 +52,7 @@ export const uploadPhoto = (photo) => {
   let url = "profile/photo";
   const formData = new FormData();
   formData.append("image", photo);
-  return axiosFetch.put(url, formData).then((response) => response.data);
+  return axiosFetch.put(url, formData);
 };
 export const setProfileInfo = (profileData) => {
   let url = "profile";

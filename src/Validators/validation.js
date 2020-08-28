@@ -6,7 +6,7 @@ export const required = (value) => {
 export const maxLengthIs = (length) => {
   return (value) => {
     if (value.length > length) {
-      return `Max length is ${length} item(s)`;
+      return `Max length is ${length} symbol(s)`;
     }
     return null;
   };
