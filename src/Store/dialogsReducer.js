@@ -1,14 +1,14 @@
 let initialState = {
   dialogs: [
     { id: 1, name: "Budd" },
+    { id: 2, name: "Dodic" },
     { id: 3, name: "Mr. Flinstone" },
     { id: 4, name: "Reptiloid" },
     { id: 5, name: "Johny" },
-    { id: 6, name: "Dodic" },
   ],
   messages: [
     { id: 1, message: "Привет))" },
-    { id: 3, message: "Братан, займи косарь до зп" },
+    { id: 2, message: "Братан, займи косарь до зп" },
   ],
 };
 
@@ -20,7 +20,7 @@ const dialogsReducer = (state = initialState, action) => {
         message: action.messageBody,
       };
       if (newMessage.message && newMessage.message.trim()) {
-        return { ...state, messages: { newMessage, ...state.messages } };
+        return { ...state, messages: [...state.messages, newMessage] };
       }
       return state;
     default:
