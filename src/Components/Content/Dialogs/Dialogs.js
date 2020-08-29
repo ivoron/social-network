@@ -3,16 +3,16 @@ import Dialog from "./Dialog";
 import Chat from "./Chat";
 import { reduxForm, Field } from "redux-form";
 
-export default function Dialogs(props) {
-  let dialogElements = props.dialogsPage.dialogs.map((user) => (
+export default function Dialogs({ dialogsPage, sendMessage }) {
+  let dialogElements = dialogsPage.dialogs.map((user) => (
     <Dialog key={user.id} personId={user.id} personName={user.name} />
   ));
-  let messageElements = props.dialogsPage.messages.map((item) => (
+  let messageElements = dialogsPage.messages.map((item) => (
     <Chat key={item.id} message={item.message} />
   ));
-  const AddMessageForm = (props) => {
+  const AddMessageForm = ({ handleSubmit }) => {
     return (
-      <form onSubmit={props.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <Field
           name={"message"}
           component={"textarea"}
@@ -27,8 +27,8 @@ export default function Dialogs(props) {
   const MessageForm = reduxForm({
     form: "send-message",
   })(AddMessageForm);
-  const sendMessage = (message) => {
-    props.sendMessage(message.message);
+  const onSubmit = (formData) => {
+    sendMessage(formData.message);
   };
   return (
     <div className="dialogs">
@@ -37,7 +37,7 @@ export default function Dialogs(props) {
       </div>
       <div className="chatBody">
         <div className="chatField">{messageElements}</div>
-        <MessageForm onSubmit={sendMessage} />
+        <MessageForm onSubmit={onSubmit} />
       </div>
     </div>
   );

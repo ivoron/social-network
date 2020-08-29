@@ -1,14 +1,13 @@
 let initialState = {
   dialogs: [
-    { id: 1, name: "Buddy" },
-    { id: 2, name: "Jackie Kennedy" },
+    { id: 1, name: "Budd" },
     { id: 3, name: "Mr. Flinstone" },
     { id: 4, name: "Reptiloid" },
     { id: 5, name: "Johny" },
+    { id: 6, name: "Dodic" },
   ],
   messages: [
     { id: 1, message: "Привет))" },
-    { id: 2, message: "I know u! U are that dude" },
     { id: 3, message: "Братан, займи косарь до зп" },
   ],
 };
@@ -21,17 +20,16 @@ const dialogsReducer = (state = initialState, action) => {
         message: action.messageBody,
       };
       if (newMessage.message && newMessage.message.trim()) {
-        let copyState = { ...state };
-        copyState.message = { ...state.message };
-        copyState.messages.push(newMessage);
-        copyState.messageBody = "";
-        return copyState;
+        return { ...state, messages: { newMessage, ...state.messages } };
       }
       return state;
     default:
       return state;
   }
 };
-export const sendMessage = (messageBody) => ({ type: "SEND-MESSAGE", messageBody });
+export const sendMessage = (messageBody) => ({
+  type: "SEND-MESSAGE",
+  messageBody,
+});
 
 export default dialogsReducer;
