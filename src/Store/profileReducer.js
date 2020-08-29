@@ -88,14 +88,10 @@ export const setStatusThunk = (status) => (dispatch) => {
 export const addPost = (post) => (dispatch) => {
   dispatch(addPostAC(post));
 };
-export const setProfilePhoto = (photo) => (dispatch, getState) => {
-  let id = getState().auth.id;
+export const setProfilePhoto = (photo) => (dispatch) => {
   uploadPhoto(photo).then((response) => {
-    console.log(response)
-    if (response.data.resultCode === 0) {
-      dispatch(addPhoto(response.data));
-      dispatch(getPropfileThunk(id));
-      
+    if (response.resultCode === 0) {
+      dispatch(addPhoto(response.data.photos));
     }
   });
 };

@@ -36,7 +36,12 @@ export const setStatus = (status) => {
   let url = "profile/status/";
   return axiosFetch.put(url, { status });
 };
-export const getLogin = (email, password, rememberMe = false, captcha = null) => {
+export const getLogin = (
+  email,
+  password,
+  rememberMe = false,
+  captcha = null
+) => {
   let url = "auth/login";
   return axiosFetch.post(url, { email, password, rememberMe, captcha });
 };
@@ -52,7 +57,7 @@ export const uploadPhoto = (photo) => {
   let url = "profile/photo";
   const formData = new FormData();
   formData.append("image", photo);
-  return axiosFetch.put(url, formData);
+  return axiosFetch.put(url, formData).then((response) => response.data);
 };
 export const setProfileInfo = (profileData) => {
   let url = "profile";
