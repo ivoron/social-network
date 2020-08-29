@@ -17,9 +17,9 @@
 .loginItem a:hover {
   color: rgb(235, 199, 151);
 }
-form {
+header form {
   display: inline;
-  margin-left: 20%;
+  margin-left: 19%;
 }
 .warningField {
   display: inline;

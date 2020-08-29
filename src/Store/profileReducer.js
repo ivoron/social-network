@@ -45,9 +45,7 @@ const profileReducer = (state = initialState, action) => {
         text: action.post,
       };
       if (newPost.text && newPost.text.trim()) {
-        let stateCopy = { ...state };
-        stateCopy.postText.unshift(newPost);
-        return stateCopy;
+        return { ...state, postText: [newPost, ...state.postText] };
       }
       return state;
     case "GET-STATUS":
