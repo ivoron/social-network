@@ -10,7 +10,7 @@ class HeaderAPI extends React.Component {
   }
 }
 const mapStateToProps = (state) => ({
-  userName: state.profilePage.profile.fullName,
+  login: state.auth.login,
   isAuth: state.auth.isAuth,
 });
 
