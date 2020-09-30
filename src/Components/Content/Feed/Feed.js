@@ -3,9 +3,11 @@ import Post from "./Post";
 import { Field, reduxForm } from "redux-form";
 
 export default function Feed(props) {
+  // список постов из стора
   let postItems = props.profilePage.postText.map((post) => (
     <Post key={post.id} userName={post.user} postText={post.text} />
   ));
+  // форма добавления поста
   const FeedForm = (props) => {
     return (
       <form onSubmit={props.handleSubmit}>

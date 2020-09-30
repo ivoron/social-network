@@ -6,6 +6,7 @@ export default function User(props) {
   const { user } = props;
   const path = "/profile/" + user.id;
   return (
+    // карточка пользователя
     <div className="userItem">
       <div className="userPhoto">
         <NavLink to={path}>

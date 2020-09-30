@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 export default function Pagination(props) {
   let pages = [];
-  let pagesCount = Math.ceil(props.totalCount / props.pageSize);
+  let pagesCount = Math.ceil(props.totalCount / props.pageSize); //числа страниц = общее число пользователей / размер обной страницы (20 шт)
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
   }
-  let portionSize = 9;
+  let portionSize = 9; // отображаемое подряд колличество страниц
   let portionCount = Math.ceil(pagesCount / portionSize);
   let [portionNumber, setPortionNumber] = useState(1);
   let leftPortionNumber = (portionNumber - 1) * portionSize + 1;

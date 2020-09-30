@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import userPic from "../../../assets/images/Cats.jpg";
-import PropfileStatus from "./StatusHooks";
+import ProfileStatus from "./ProfileStatus";
 import { ProfileEditor, ProfileData } from "./ProfileData";
 
 export default function Profile(props) {
   let { profile } = props;
   let { contacts } = profile;
   const [editMode, setEditMode] = useState(false);
+  // загрузка фото профиля на сервер
   const uploadPhoto = (e) => {
     props.setProfilePhoto(e.target.files[0]);
   };
+  // редактирование данных пользователя
   const editProfile = () => {
     setEditMode(true);
   };
@@ -32,7 +34,7 @@ export default function Profile(props) {
         <div className="info">
           <h3>{profile.fullName}</h3>
           {props.isMyPage ? (
-            <PropfileStatus status={props.status} setStatus={props.setStatus} />
+            <ProfileStatus status={props.status} setStatus={props.setStatus} />
           ) : (
             <span>{props.status ? props.status : "no status"}</span>
           )}

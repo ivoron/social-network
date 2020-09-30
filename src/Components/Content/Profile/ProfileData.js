@@ -2,7 +2,7 @@ import React from "react";
 import { Field, reduxForm } from "redux-form";
 import { Input } from "../../../Validators/WarningFieid";
 
-const Contact = ({ contactKey, contactValue }) => {
+const Contact = ({ contactKey, contactValue }) => { // отображение списка контактов
   return (
     <div>
       {contactValue && (
@@ -13,7 +13,7 @@ const Contact = ({ contactKey, contactValue }) => {
     </div>
   );
 };
-export const ProfileData = ({ profile, contacts, editProfile, isMyPage }) => {
+export const ProfileData = ({ profile, contacts, editProfile, isMyPage }) => { //данные профиля в режиме просмотра
   return (
     <>
       <hr />
@@ -30,7 +30,7 @@ export const ProfileData = ({ profile, contacts, editProfile, isMyPage }) => {
     </>
   );
 };
-const DataFormEditor = ({ contacts, handleSubmit, error }) => {
+const DataFormEditor = ({ contacts, handleSubmit, error }) => {// данные профиля в режиме редактирования
   return (
     <form onSubmit={handleSubmit}>
       <span>Name:</span>

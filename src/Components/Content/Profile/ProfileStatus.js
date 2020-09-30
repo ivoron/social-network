@@ -1,71 +1,55 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
+import React from "react";
 
-export default class ProfileStatus extends Component {
-  state = {
-    editMode: false,
-    status: this.props.status,
-    error: false,
-    msg: "max length is 300 symbols"
+const ProfileStatus = (props) => {
+  let [editMode, setEditMode] = useState(false);
+  let [status, setStatus] = useState(props.status);
+  let [error, setError] = useState(false);
+  let msg = `Maximum length is 300 symbols, now ${
+    status ? status.length : null
+  }`;
+  useEffect(() => {
+    setStatus(props.status);
+  }, [props.status]);
+  const editStatus = () => {
+    setEditMode(true);
   };
-
-  editStatus = () => {
-    this.setState({
-      editMode: true,
-    });
+  const seveStatus = () => {
+    setEditMode(false);
+    props.setStatus(status);
   };
-  changeStatus = (e) => {
-    this.setState({
-      status: e.target.value,
-    });
-    if(this.state.status.length > 300) {
-      this.setState({
-        error: true,
-      })
-    }
-    if(this.state.status.length <= 300) {
-      this.setState({
-        error: false,
-      })
+  const changeStatus = (e) => {
+    setStatus(e.target.value);
+    if (status.length > 298) {
+      setError(true);
+    } else {
+      setError(false);
     }
   };
-  setStatus = () => {
-    this.setState({
-      editMode: false,
-    });
-    this.props.setStatus(this.state.status);
-  };
-  componentDidUpdate(prevProps) {
-    if (prevProps.status !== this.props.status) {
-      this.setState({
-        status: this.props.status,
-      });
-    }
-  }
-  render() {
-    const {editMode, error, msg} = this.state
-    const {status} = this.props
-    return (
-      <div>
-        {editMode ? (
-          <>
-          <input id={error && "warning"}
+  return (
+    <div>
+      {editMode ? (
+        <>
+          <input
+            id={error && "warning"}
             autoFocus={true}
-            onChange={this.changeStatus}
-            onBlur={this.setStatus}
-            value={this.state.status}
-          /><br/>
-          <span style={{color: 'red'}}>{error &&msg}</span>
-          </>
-        ) : (
-          <span
-            className={!status ? "editStatus" : null}
+            onChange={changeStatus}
+            onBlur={seveStatus}
             value={status}
-            onClick={this.editStatus}
-          >
-            {status || "change status..."}
-          </span>
-        )}
-      </div>
-    );
-  }
-}
+          />
+          <br />
+          <span style={{ color: "red" }}>{error && msg}</span>
+        </>
+      ) : (
+        <span
+          className={!status ? "editStatus" : "trueStatus"}
+          value={status}
+          onClick={editStatus}
+        >
+          {props.status || "change status..."}
+        </span>
+      )}
+    </div>
+  );
+};
+export default ProfileStatus;

@@ -9,6 +9,7 @@ import "./login.css";
 let maxLengthIs20 = maxLengthIs(20);
 
 function Login(props) {
+  // форма логинизации + обработка ошибок
   const LoginForm = ({ handleSubmit, error }) => {
     return (
       <form onSubmit={handleSubmit}>

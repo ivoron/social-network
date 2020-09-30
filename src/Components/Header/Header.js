@@ -4,7 +4,7 @@ import SearchForm from "./SearchForm";
 
 export default function Header(props) {
   const onSubmit = (formData) => {
-    console.log(formData);
+    console.log(formData); // поиск по сайту на доработке 
   };
   return (
     <div className="App-header">

@@ -6,10 +6,12 @@ import { reduxForm, Field } from "redux-form";
 export default function Dialogs({ dialogsPage, sendMessage }) {
   let dialogElements = dialogsPage.dialogs.map((user) => (
     <Dialog key={user.id} personId={user.id} personName={user.name} />
-  ));
+  )); // список диалогов из стора
   let messageElements = dialogsPage.messages.map((item) => (
     <Chat key={item.id} message={item.message} />
-  ));
+  )); // список сообщений из стора
+
+  // форма добавления сообщений
   const AddMessageForm = ({ handleSubmit }) => {
     return (
       <form onSubmit={handleSubmit}>

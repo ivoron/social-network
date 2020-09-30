@@ -17,7 +17,7 @@ class Content extends React.Component {
   componentDidMount() {
     this.props.initialApp();
   }
-  render() {
+  render() { // инициализация приложения = загрузка данных из API
     if (!this.props.appInit) {
       return <Preloader />;
     }
