@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 
-export default function Pagination(props) {
-  let pages = [];
-  let pagesCount = Math.ceil(props.totalCount / props.pageSize); //числа страниц = общее число пользователей / размер обной страницы (20 шт)
+type PropsType = {
+  totalCount: number;
+  pageSize: number;
+  changePage: (page: number) => void;
+  currentPage: number;
+};
+export default function Pagination({
+  totalCount,
+  pageSize,
+  changePage,
+  currentPage,
+}: PropsType) {
+  let pages:Array<number> = [];
+  let pagesCount: number = Math.ceil(totalCount / pageSize); //числа страниц = общее число пользователей / размер обной страницы (20 шт)
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
   }
@@ -32,9 +43,9 @@ export default function Pagination(props) {
           <button
             key={page}
             onClick={() => {
-              props.changePage(page);
+              changePage(page);
             }}
-            id={props.currentPage === page ? "currentPage" : null}
+            id={currentPage === page ? "currentPage" : undefined}
           >
             {page}
           </button>

@@ -2,23 +2,40 @@ import React from "react";
 import {
   setCurrentPage,
   getUsersThunk,
-  followTrack
+  followTrack,
+  UsersType,
 } from "../../../Store/usersReducer";
 import { setCurrentID } from "../../../Store/profileReducer";
 import withRedirect from "../../../HOC/withRedirect";
 import { compose } from "redux";
 import { getUsers } from "../../../assets/Selectors/user-selectors";
-import "./users-page.css"
-const { connect } = require("react-redux");
-const { default: Users } = require("./Users");
+import "./users-page.css";
+import { AppStateType } from "../../../Store/redux-store";
+import { connect } from "react-redux";
+import Users from "./Users";
 
-class UsersAPI extends React.Component {
+type DispatchPropsType = {
+  getUsersThunk: (currentPage: number, pageSize: number) => void;
+  setCurrentPage: (page: number) => void;
+  changePage: (page: number) => void;
+  setCurrentID: (id: number) => void;
+  followTrack: (id: number, followed: boolean) => void;
+};
+type StatePropsType = {
+  users: Array<UsersType>;
+  totalCount: number;
+  pageSize: number;
+  currentPage: number;
+  isLoading: boolean;
+  followFetch: Array<number>;
+};
+type PropsType = StatePropsType & DispatchPropsType;
+class UsersContainer extends React.Component<PropsType> {
   componentDidMount() {
-    if (this.props.users.length === 1) {
-      this.props.getUsersThunk(this.props.currentPage, this.props.pageSize);
-    }
+    const { getUsersThunk, currentPage, pageSize } = this.props;
+    getUsersThunk(currentPage, pageSize);
   }
-  changePage = (page) => {
+  changePage = (page: number) => {
     this.props.setCurrentPage(page);
     this.props.getUsersThunk(page, this.props.pageSize);
   };
@@ -38,7 +55,7 @@ class UsersAPI extends React.Component {
     );
   }
 }
-const mapStateToprops = (state) => {
+const mapStateToprops = (state: AppStateType): StatePropsType => {
   return {
     users: getUsers(state),
     totalCount: state.usersPage.totalCount,
@@ -54,7 +71,7 @@ export default compose(
     setCurrentPage,
     setCurrentID,
     getUsersThunk,
-    followTrack
+    followTrack,
   }),
   withRedirect
-)(UsersAPI);
+)(UsersContainer);

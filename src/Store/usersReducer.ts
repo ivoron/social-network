@@ -12,7 +12,7 @@ let initialState: InitStateType = {
     },// массив объектов с сервера
   ],
   currentPage: 1, // номер текущей страницы
-  totalCount: null, // общее число пользователей
+  totalCount: 0, // общее число пользователей
   pageSize: 10, // колличество юзеров на одной странице
   isLoading: false, // индикатор лоадера
   followFetch: [],// id юзеров, на которых ушел запрос на подписку
@@ -20,12 +20,12 @@ let initialState: InitStateType = {
 type InitStateType = {
   users: Array<UsersType>
   currentPage: number,
-  totalCount: null| number,
+  totalCount: number,
   pageSize: number,
   isLoading: boolean,
   followFetch: Array<number>,
 }
-type UsersType = {
+export type UsersType = {
   id: number
   followed: boolean
   name: string

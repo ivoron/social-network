@@ -2,7 +2,12 @@ import React from "react";
 import pic from "../../../assets/images/cat1.jpg";
 import { NavLink } from "react-router-dom";
 
-export default function User(props) {
+type PropsType = {
+  user: any
+  followFetch: Array<number>
+  followTrack: (id: number, followed: boolean) => void
+}
+export default function User(props: PropsType) {
   const { user } = props;
   const path = "/profile/" + user.id;
   return (
@@ -21,7 +26,7 @@ export default function User(props) {
         <button
           id="followBtn"
           onClick={() => props.followTrack(user.id, user.followed)}
-          disabled={props.followFetch.some((id) => id === user.id)}
+          disabled={props.followFetch.some((id: number) => id === user.id)}
         >
           {user.followed ? "unfollow" : "follow"}
         </button>
