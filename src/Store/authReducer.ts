@@ -2,7 +2,6 @@ import { getAuth, getLogin, getLogOut, getCaptcha } from "../API/getApi";
 import { stopSubmit } from "redux-form";
 import { SET_AUTH_DATA, SET_CAPTCHA_URL } from "./actionTypes";
 
-
 type InitStateType = {
   id: null | number;
   login: null | string;
@@ -31,7 +30,7 @@ const authReducer = (state = initialState, action: any): InitStateType => {
 type SetAuthType = {
   type: typeof SET_AUTH_DATA;
   payload: dataType;
-  isAuth: boolean
+  isAuth: boolean;
 };
 type dataType = {
   id: number | null;
@@ -46,7 +45,7 @@ export const setAuthData = (
 ): SetAuthType => ({
   type: SET_AUTH_DATA,
   payload: { id, email, login },
-  isAuth
+  isAuth,
 });
 
 type SetCaptchaType = {
@@ -57,43 +56,39 @@ const setCaptchaUrl = (captchaUrl: string): SetCaptchaType => ({
   type: SET_CAPTCHA_URL,
   captchaUrl,
 });
-export const getAuthThunk = () => (dispatch: any) => {
-  return getAuth().then((data: any) => {
+export const getAuthThunk = () => async (dispatch: any) => {
+  let data = await getAuth();
+  if (data.resultCode === 0) {
     let { id, login, email } = data.data;
-    if (data.resultCode === 0) {
-      dispatch(setAuthData(id, email, login, true));
-    }
-  });
+    dispatch(setAuthData(id, email, login, true));
+  }
 };
 export const loginThunk = (
   email: string,
   password: string,
   rememberMe: boolean,
   captcha: string
-) => (dispatch: any) => {
-  getLogin(email, password, rememberMe, captcha).then((response: any) => {
-    if (response.data.resultCode === 0) {
-      dispatch(getAuthThunk());
-    } else {
-      if (response.data.resultCode === 10) {
-        getCaptcha().then((response: any) => {
-          dispatch(setCaptchaUrl(response.url));
-        });
-      }
-      let message = response.data.messages[0];
-      dispatch(stopSubmit("login-form", { _error: message }));
+) => async (dispatch: any) => {
+  let response = await getLogin(email, password, rememberMe, captcha);
+  if (response.data.resultCode === 0) {
+    dispatch(getAuthThunk());
+  } else {
+    if (response.data.resultCode === 10) {
+      let response = await getCaptcha();
+      dispatch(setCaptchaUrl(response.url));
     }
-  });
+    let message = response.data.messages[0];
+    dispatch(stopSubmit("login-form", { _error: message }));
+  }
 };
-export const logOutThunk = () => (dispatch: any) => {
-  getLogOut().then((responce: any) => {
-    if (responce.data.resultCode === 0) {
-      let id = null,
-        login = null,
-        email = null;
-      dispatch(setAuthData(id, email, login, false));
-    }
-  });
+export const logOutThunk = () => async (dispatch: any) => {
+  let response = await getLogOut();
+  if (response.data.resultCode === 0) {
+    let id = null,
+      login = null,
+      email = null;
+    dispatch(setAuthData(id, email, login, false));
+  }
 };
 
 export default authReducer;

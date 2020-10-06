@@ -12,7 +12,7 @@ export const GET_STATUS: string = "GET-STATUS"
 export const SET_STATUS: string = "SET-STATUS"
 export const ADD_USER_PHOTO: string = "ADD-USER-PHOTO"
 // страница пользователей
-export const FOLLOW: string = "FOLLOW"
+export const FOLLOW: string = "FOLLOW_USER"
 export const UNFOLLOW: string = "UNFOLLOW"
 export const SET_USERS: string = "SET-USERS"
 export const SET_CURRENT_PAGE: string = "SET-CURRENT-PAGE"

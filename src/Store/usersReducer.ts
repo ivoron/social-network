@@ -1,6 +1,15 @@
 import { getUsers, followUser, unfollowUser } from "../API/getApi";
 import { PhotosType } from "./profileReducer";
-import { FOLLOW, UNFOLLOW, SET_USERS, SET_CURRENT_PAGE, SET_TOTAL_COUNT, SET_LOADER, DISABLE_BTN } from "./actionTypes";
+import {
+  FOLLOW,
+  UNFOLLOW,
+  SET_USERS,
+  SET_CURRENT_PAGE,
+  SET_TOTAL_COUNT,
+  SET_LOADER,
+  DISABLE_BTN,
+} from "./actionTypes";
+
 let initialState: InitStateType = {
   users: [
     {
@@ -9,30 +18,35 @@ let initialState: InitStateType = {
       name: "Ilya Voronov",
       status: "hey there!",
       photos: { small: null, large: null },
-    },// массив объектов с сервера
+    }, // массив объектов с сервера
   ],
   currentPage: 1, // номер текущей страницы
   totalCount: 0, // общее число пользователей
   pageSize: 10, // колличество юзеров на одной странице
   isLoading: false, // индикатор лоадера
-  followFetch: [],// id юзеров, на которых ушел запрос на подписку
+  followFetch: [], // id юзеров, на которых ушел запрос на подписку
 };
+
 type InitStateType = {
-  users: Array<UsersType>
-  currentPage: number,
-  totalCount: number,
-  pageSize: number,
-  isLoading: boolean,
-  followFetch: Array<number>,
-}
+  users: Array<UsersType>;
+  currentPage: number;
+  totalCount: number;
+  pageSize: number;
+  isLoading: boolean;
+  followFetch: Array<number>;
+};
 export type UsersType = {
-  id: number
-  followed: boolean
-  name: string
-  status: string
-  photos: PhotosType
-}
-const usersReducer = (state = initialState, action: any): InitStateType => {
+  id: number;
+  followed: boolean;
+  name: string;
+  status: string;
+  photos: PhotosType;
+};
+
+const usersReducer = (
+  state = initialState,
+  action: UnionActionTypes
+): InitStateType => {
   switch (action.type) {
     case FOLLOW:
       return {
@@ -88,40 +102,102 @@ const usersReducer = (state = initialState, action: any): InitStateType => {
   }
 };
 
-export const follow = (userID: number) => ({ type: FOLLOW, userID });
-export const unfollow = (userID: number) => ({ type: UNFOLLOW, userID });
-export const setUsers = (users: Array<UsersType>) => ({ type: SET_USERS, users });
-export const setCurrentPage = (currentPage: number) => ({
+type UnionActionTypes = FollowType &
+  UnfollowType &
+  SetUsersType &
+  SetCurrentPageType &
+  SetTotalCountType &
+  FollowedTogleType &
+  SetLoaderType;
+// c оператором | редьюсер не работает
+
+interface FollowType {
+  type: typeof FOLLOW;
+  userID: number;
+}
+interface UnfollowType {
+  type: typeof UNFOLLOW;
+  userID: number;
+}
+interface SetUsersType {
+  type: typeof SET_USERS;
+  users: Array<UsersType>;
+}
+interface SetCurrentPageType {
+  type: typeof SET_CURRENT_PAGE;
+  currentPage: number;
+}
+interface SetTotalCountType {
+  type: typeof SET_TOTAL_COUNT;
+  totalCount: number;
+}
+interface FollowedTogleType {
+  type: typeof DISABLE_BTN;
+  isFetching: boolean;
+  userID: number;
+}
+interface SetLoaderType {
+  type: typeof SET_LOADER;
+  isLoading: boolean;
+}
+
+const follow = (userID: number): FollowType => ({
+  type: FOLLOW,
+  userID,
+});
+
+const unfollow = (userID: number): UnfollowType => ({
+  type: UNFOLLOW,
+  userID,
+});
+
+const setUsers = (users: Array<UsersType>): SetUsersType => ({
+  type: SET_USERS,
+  users,
+});
+
+export const setCurrentPage = (currentPage: number): SetCurrentPageType => ({
   type: SET_CURRENT_PAGE,
   currentPage,
 });
-export const setTotalCount = (totalCount: number) => ({
+
+const setTotalCount = (totalCount: number): SetTotalCountType => ({
   type: SET_TOTAL_COUNT,
   totalCount,
 });
-export const followedToggle = (isFetching: boolean, userID: number) => ({
+
+const followedToggle = (
+  isFetching: boolean,
+  userID: number
+): FollowedTogleType => ({
   type: DISABLE_BTN,
   isFetching,
   userID,
 });
-export const setLoader = (isLoading: boolean) => ({ type: SET_LOADER, isLoading });
 
-export const getUsersThunk = (currentPage: number, pageSize: number) => (dispatch: any) => {
+const setLoader = (isLoading: boolean): SetLoaderType => ({
+  type: SET_LOADER,
+  isLoading,
+});
+
+export const getUsersThunk = (currentPage: number, pageSize: number) => async (
+  dispatch: any
+) => {
   dispatch(setLoader(true));
-  getUsers(currentPage, pageSize).then((data: any) => {
-    dispatch(setUsers(data.items));
-    dispatch(setTotalCount(data.totalCount));
-    dispatch(setLoader(false));
-  });
+  let data = await getUsers(currentPage, pageSize);
+  dispatch(setUsers(data.items));
+  dispatch(setTotalCount(data.totalCount));
+  dispatch(setLoader(false));
 };
-export const followTrack = (id: number, followed: boolean) => (dispatch: any) => {
+export const followTrack = (id: number, followed: boolean) => async (
+  dispatch: any
+) => {
   dispatch(followedToggle(true, id));
-  (followed ? unfollowUser(id) : followUser(id)).then((data: any) => {
-    dispatch(followedToggle(false, id));
-    if (data.resultCode === 0) {
-      dispatch(followed ? unfollow(id) : follow(id));
-    }
-  });
+  let data = await (followed ? unfollowUser(id) : followUser(id));
+  if (data.resultCode === 0) {
+    dispatch(followed ? unfollow(id) : follow(id));
+  }
+  dispatch(followedToggle(false, id));
 };
 
 export default usersReducer;

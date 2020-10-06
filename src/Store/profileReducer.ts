@@ -6,9 +6,14 @@ import {
   setProfileInfo,
 } from "../API/getApi";
 import { stopSubmit } from "redux-form";
-import { SET_PROFILE, SET_CURRENT_ID, ADD_POST, GET_STATUS, SET_STATUS, ADD_USER_PHOTO } from "./actionTypes";
-
-
+import {
+  SET_PROFILE,
+  SET_CURRENT_ID,
+  ADD_POST,
+  GET_STATUS,
+  SET_STATUS,
+  ADD_USER_PHOTO,
+} from "./actionTypes";
 
 let initialState = {
   profile: {
@@ -18,7 +23,6 @@ let initialState = {
       small: null,
       large: null,
     },
-    aboutMe: "its me",
     contacts: {},
   } as ProfileType,
   status: "",
@@ -28,33 +32,34 @@ let initialState = {
     { id: 2, user: "Johny", text: "Где деньги, Лебовски?" },
   ] as Array<PostType>,
 };
-type ProfileType = {
-  userId: number | null
-    fullName: string,
-    photos: PhotosType
-    aboutMe: string | null,
-    contacts: ContactsType
-}
+export type ProfileType = {
+  userId: number | null;
+  lookingForAJob: boolean;
+  lookingForAJobDescription: string;
+  fullName: string;
+  contacts: ContactsType;
+  photos: PhotosType;
+};
 export type PhotosType = {
-  small: string | null,
-  large: string | null,
-}
+  small: string | null;
+  large: string | null;
+};
 type ContactsType = {
-  github: string | null
-  vk: string | null
-  facebook: string | null
-  instagram: string | null
-  twitter: string | null
-  website: string | null
-  youtube: string | null
-  mainLinnk: string | null
-}
+  github: string | null;
+  vk: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  twitter: string | null;
+  website: string | null;
+  youtube: string | null;
+  mainLinnk: string | null;
+};
 type PostType = {
-  id: number
-  user: string
-  text: string
-}
-export type InitStateType = typeof initialState
+  id: number;
+  user: string;
+  text: string;
+};
+export type InitStateType = typeof initialState;
 const profileReducer = (state = initialState, action: any): InitStateType => {
   switch (action.type) {
     case SET_PROFILE:
@@ -88,43 +93,48 @@ const profileReducer = (state = initialState, action: any): InitStateType => {
   }
 };
 
-export const setProfile = (profile: ProfileType) => ({ type: SET_PROFILE, profile });
+export const setProfile = (profile: ProfileType) => ({
+  type: SET_PROFILE,
+  profile,
+});
 export const setCurrentID = (id: number) => ({ type: SET_CURRENT_ID, id });
 export const addPostAC = (post: PostType) => ({ type: ADD_POST, post });
 //delete post
-export const addPhoto = (photos: PhotosType) => ({ type: ADD_USER_PHOTO, photos });
+export const addPhoto = (photos: PhotosType) => ({
+  type: ADD_USER_PHOTO,
+  photos,
+});
 export const getStatusAC = (id: number) => ({ type: GET_STATUS, id });
 export const setStatusAC = (status: string) => ({ type: SET_STATUS, status });
 
-export const getPropfileThunk = (id: number) => (dispatch: any) => {
-  getProfile(id).then((data: ProfileType) => {
-    dispatch(setProfile(data));
-    dispatch(setCurrentID(id));
-  });
+export const getPropfileThunk = (id: number) => async (dispatch: any) => {
+  let data = await getProfile(id);
+  dispatch(setProfile(data));
+  dispatch(setCurrentID(id));
 };
-export const getStatusThunk = (id: number) => (dispatch: any) => {
-  getStatus(id).then((response: any) => {
-    dispatch(setStatusAC(response.data));
-  });
+export const getStatusThunk = (id: number) => async (dispatch: any) => {
+  let response = await getStatus(id);
+  dispatch(setStatusAC(response.data));
 };
-export const setStatusThunk = (status: string) => (dispatch: any) => {
-  setStatus(status).then((response: any) => {
-    if (response.data.resultCode === 0) {
-      dispatch(setStatusAC(status));
-    }
-  });
+export const setStatusThunk = (status: string) => async (dispatch: any) => {
+  let response = await setStatus(status);
+  if (response.data.resultCode === 0) {
+    dispatch(setStatusAC(status));
+  }
 };
 export const addPost = (post: PostType) => (dispatch: any) => {
   dispatch(addPostAC(post));
 };
-export const setProfilePhoto = (photo: any) => (dispatch: any) => {
-  uploadPhoto(photo).then((response: any) => {
-    if (response.resultCode === 0) {
-      dispatch(addPhoto(response.data.photos));
-    }
-  });
+export const setProfilePhoto = (photo: any) => async (dispatch: any) => {
+  let response = await uploadPhoto(photo);
+  if (response.resultCode === 0) {
+    dispatch(addPhoto(response.data.photos));
+  }
 };
-export const setProfileData = (profileData: ProfileType) => async (dispatch: any, getState: any) => {
+export const setProfileData = (profileData: ProfileType) => async (
+  dispatch: any,
+  getState: any
+) => {
   let id = getState().auth.id;
   let response = await setProfileInfo(profileData);
   if (response.data.resultCode === 0) {
