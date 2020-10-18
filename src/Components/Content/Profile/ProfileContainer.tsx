@@ -7,13 +7,36 @@ import {
   getStatusThunk,
   setProfilePhoto,
   setProfileData,
+  ProfileType,
 } from "../../../Store/profileReducer";
 import { withRouter } from "react-router-dom";
 import withRedirect from "../../../HOC/withRedirect";
 import "./profile-page.css";
 import { compose } from "redux";
+import { AppStateType } from "../../../Store/redux-store";
 
-class ProfileAPI extends React.Component {
+type MapDispatchPropsType = {
+  match: {
+    params: {
+      id: number;
+    };
+  };
+  getPropfileThunk: (id: number) => void;
+  getStatusThunk: (id: number) => void;
+  setStatusThunk: (status: string) => void;
+  setProfilePhoto: (photo: File) => void;
+  setProfileData: (profileData: ProfileType) => Promise<{}>;
+};
+type MapStatePropsType = {
+  profile: ProfileType;
+  myID: number;
+  userID: number;
+  status: string;
+  myProfile: number;
+};
+class ProfileAPI extends React.Component<
+  MapStatePropsType & MapDispatchPropsType
+> {
   componentDidMount() {
     let myProfile = this.props.myProfile; //мой айди
     let user = this.props.match.params.id; //айди юзера через роутер
@@ -21,7 +44,7 @@ class ProfileAPI extends React.Component {
     getPropfileThunk(user ? user : myProfile);
     getStatusThunk(user ? user : myProfile);
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: MapDispatchPropsType) {
     if (prevProps.match.params.id !== this.props.match.params.id) {
       let myID = this.props.myProfile;
       const { getPropfileThunk, getStatusThunk } = this.props;
@@ -43,14 +66,14 @@ class ProfileAPI extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType) => ({
   profile: state.profilePage.profile,
   myID: state.auth.id,
   userID: state.profilePage.currentID,
   status: state.profilePage.status,
   myProfile: state.auth.id,
 });
-export default compose(
+export default compose<React.ComponentType>(
   connect(mapStateToProps, {
     getPropfileThunk,
     getStatusThunk,

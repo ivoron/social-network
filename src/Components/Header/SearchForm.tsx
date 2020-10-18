@@ -1,8 +1,8 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, InjectedFormProps } from "redux-form";
 import { Input } from "../../Validators/WarningFieid";
 
-const Search = ({ handleSubmit }) => {
+const Search:React.FC<InjectedFormProps<FormDataType>> = ({ handleSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Field name={"search"} component={Input} placeholder={"Поиск"} />
@@ -10,6 +10,9 @@ const Search = ({ handleSubmit }) => {
     </form>
   );
 }
-const SearchForm = reduxForm({ form: "search-form" })(Search);
+const SearchForm = reduxForm<FormDataType>({ form: "search-form" })(Search);
 
+type FormDataType = {
+  search: string
+}
 export default SearchForm;

@@ -66,7 +66,7 @@ const mapStateToprops = (state: AppStateType): StatePropsType => {
   };
 };
 
-export default compose(
+export default compose<React.ComponentType>(
   connect(mapStateToprops, {
     setCurrentPage,
     setCurrentID,

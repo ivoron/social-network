@@ -1,32 +1,38 @@
 import { getAuthThunk } from "./authReducer";
-import { SET_INITIAL } from "./actionTypes";
-
+import { InferActionTypes, BaseThunkType } from "./redux-store";
 
 export type InitStateType = {
-  appInit: boolean
-}
-type InitStateAC = {
-  type: typeof SET_INITIAL
-}
+  appInit: boolean;
+};
 
 let initialState: InitStateType = {
   appInit: false,
 };
-const appReducer = (state = initialState, action: any): InitStateType => {
+const appReducer = (
+  state = initialState,
+  action: ActionTypes
+): InitStateType => {
   switch (action.type) {
-    case SET_INITIAL:
+    case "SET_INITIAL":
       return { ...state, appInit: true };
     default:
       return state;
   }
 };
-export const setInitialApp =  (): InitStateAC => ({
-  type: SET_INITIAL,
-});
+type ActionTypes = InferActionTypes<typeof actions>;
 
-export const initialApp = () => (dispatch: any) => {
-    dispatch(getAuthThunk()).then(() => {
-      dispatch(setInitialApp());
-    });
-  };
+export const actions = {
+  setInitialApp: () =>
+    ({
+      type: "SET_INITIAL",
+    } as const),
+};
+
+type ThunkType = BaseThunkType<ActionTypes>;
+
+export const initialApp = (): ThunkType => async (dispatch) => {
+  dispatch(getAuthThunk()).then(() => {
+    dispatch(actions.setInitialApp());
+  });
+};
 export default appReducer;

@@ -1,8 +1,18 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, InjectedFormProps } from "redux-form";
 import { Input } from "../../../Validators/WarningFieid";
+import { ProfileType, ContactsType } from "../../../Store/profileReducer";
 
-const Contact = ({ contactKey, contactValue }) => { // отображение списка контактов
+type ContactsPropsType = {
+  contactKey: string | null;
+  contactValue: string | null;
+};
+
+const Contacts: React.FC<ContactsPropsType> = ({
+  contactKey,
+  contactValue,
+}) => {
+  // отображение списка контактов
   return (
     <div>
       {contactValue && (
@@ -13,24 +23,47 @@ const Contact = ({ contactKey, contactValue }) => { // отображение с
     </div>
   );
 };
-export const ProfileData = ({ profile, contacts, editProfile, isMyPage }) => { //данные профиля в режиме просмотра
+
+type ProfilePropsType = {
+  profile: ProfileType;
+  contacts: ContactsType;
+  editProfile: () => void;
+  isMyPage: boolean;
+};
+export const ProfileData: React.FC<ProfilePropsType> = ({
+  profile,
+  contacts,
+  editProfile,
+  isMyPage,
+}) => {
+  //данные профиля в режиме просмотра
   return (
     <>
       <hr />
-      <div> О себе: {profile.aboutMe}</div>
       <span>{profile.lookingForAJob && "В поиске работы."}</span>
       <br />
       <span>Скиллы: {profile.lookingForAJobDescription}</span>
       <div>
         {Object.keys(contacts).map((key) => (
-          <Contact key={key} contactValue={contacts[key]} contactKey={contacts[key]} />
+          <Contacts
+            key={key}
+            contactKey={contacts[key as keyof ContactsType]}
+            contactValue={contacts[key as keyof ContactsType]}
+          />
         ))}
       </div>
       {isMyPage && <button onClick={editProfile}>edit</button>}
     </>
   );
 };
-const DataFormEditor = ({ contacts, handleSubmit, error }) => {// данные профиля в режиме редактирования
+
+type DataFormPropsType = {
+  profile: ProfileType;
+};
+const DataFormEditor: React.FC<
+  InjectedFormProps<ProfileType, DataFormPropsType> & DataFormPropsType
+> = ({ profile, handleSubmit, error }) => {
+  // данные профиля в режиме редактирования
   return (
     <form onSubmit={handleSubmit}>
       <span>Name:</span>
@@ -44,7 +77,7 @@ const DataFormEditor = ({ contacts, handleSubmit, error }) => {// данные �
       <Field
         validate={[]}
         name={"aboutMe"}
-        component={"textarea"}  //вместо инпута
+        component={"textarea"} //вместо инпута
         placeholder={"about me"}
       />
       <label style={{ marginRight: 23 }}>
@@ -60,7 +93,7 @@ const DataFormEditor = ({ contacts, handleSubmit, error }) => {// данные �
         placeholder={"your professional skills"}
       />
       <span>contacts:</span>
-      {Object.keys(contacts).map((key) => (
+      {Object.keys(profile.contacts).map((key) => (
         <Field
           key={key}
           name={`contacts.${key}`}
@@ -74,6 +107,6 @@ const DataFormEditor = ({ contacts, handleSubmit, error }) => {// данные �
     </form>
   );
 };
-export const ProfileEditor = reduxForm({ form: "profile-editor" })(
-  DataFormEditor
-);
+export const ProfileEditor = reduxForm<ProfileType, DataFormPropsType>({
+  form: "profile-editor",
+})(DataFormEditor);

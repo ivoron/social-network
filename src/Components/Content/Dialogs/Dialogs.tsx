@@ -1,9 +1,17 @@
 import React from "react";
 import Dialog from "./Dialog";
 import Chat from "./Chat";
-import { reduxForm, Field } from "redux-form";
+import { reduxForm, Field, InjectedFormProps } from "redux-form";
+import { InitStateType } from "../../../Store/dialogsReducer";
 
-export default function Dialogs({ dialogsPage, sendMessage }) {
+type PropsType = {
+  dialogsPage: InitStateType;
+  sendMessage: (message: string) => void;
+};
+type MessageFormDataType = {
+  message: string;
+};
+const Dialogs: React.FC<PropsType> = ({ dialogsPage, sendMessage }) => {
   let dialogElements = dialogsPage.dialogs.map((user) => (
     <Dialog key={user.id} personId={user.id} personName={user.name} />
   )); // список диалогов из стора
@@ -12,7 +20,9 @@ export default function Dialogs({ dialogsPage, sendMessage }) {
   )); // список сообщений из стора
 
   // форма добавления сообщений
-  const AddMessageForm = ({ handleSubmit }) => {
+  const AddMessageForm: React.FC<InjectedFormProps<MessageFormDataType>> = ({
+    handleSubmit,
+  }) => {
     return (
       <form onSubmit={handleSubmit}>
         <Field
@@ -26,10 +36,10 @@ export default function Dialogs({ dialogsPage, sendMessage }) {
       </form>
     );
   };
-  const MessageForm = reduxForm({
+  const MessageForm = reduxForm<MessageFormDataType>({
     form: "send-message",
   })(AddMessageForm);
-  const onSubmit = (formData) => {
+  const onSubmit = (formData: MessageFormDataType) => {
     sendMessage(formData.message);
   };
   return (
@@ -43,4 +53,5 @@ export default function Dialogs({ dialogsPage, sendMessage }) {
       </div>
     </div>
   );
-}
+};
+export default Dialogs;

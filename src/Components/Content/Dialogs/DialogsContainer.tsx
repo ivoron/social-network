@@ -4,14 +4,15 @@ import { connect } from "react-redux";
 import withRedirect from "../../../HOC/withRedirect";
 import { compose } from "redux";
 import "./dialogs.css";
+import { AppStateType } from "../../../Store/redux-store";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppStateType) => {
   return {
     dialogsPage: state.dialogsPage,
   };
 };
 
-export default compose(
+export default compose<React.ComponentType>(
   connect(mapStateToProps, {
     sendMessage,
   }),

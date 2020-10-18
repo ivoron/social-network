@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import React from "react";
 
-const ProfileStatus = (props) => {
+type PropsType = {
+  status: string;
+  setStatus: (status: string) => void;
+};
+const ProfileStatus: React.FC<PropsType> = (props) => {
   let [editMode, setEditMode] = useState(false);
   let [status, setStatus] = useState(props.status);
   let [error, setError] = useState(false);
@@ -18,7 +22,7 @@ const ProfileStatus = (props) => {
     setEditMode(false);
     props.setStatus(status);
   };
-  const changeStatus = (e) => {
+  const changeStatus = (e: ChangeEvent<HTMLInputElement>) => {
     setStatus(e.target.value);
     if (status.length > 298) {
       setError(true);
@@ -31,7 +35,7 @@ const ProfileStatus = (props) => {
       {editMode ? (
         <>
           <input
-            id={error && "warning"}
+            id={error ? "warning" : undefined}
             autoFocus={true}
             onChange={changeStatus}
             onBlur={seveStatus}
@@ -43,7 +47,6 @@ const ProfileStatus = (props) => {
       ) : (
         <span
           className={!status ? "editStatus" : "trueStatus"}
-          value={status}
           onClick={editStatus}
         >
           {props.status || "change status..."}

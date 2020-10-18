@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-export default function Chat(props) {
+export default function Chat(props: PropsType) {
   let path = "/dialogs/" + props.personId;
   return (
     <div>
@@ -10,4 +10,8 @@ export default function Chat(props) {
       </li>
     </div>
   );
+}
+type PropsType = {
+  personId: number
+  personName: string
 }

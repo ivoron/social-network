@@ -1,21 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import userPic from "../../../assets/images/Cats.jpg";
 import ProfileStatus from "./ProfileStatus";
 import { ProfileEditor, ProfileData } from "./ProfileData";
+import { ProfileType } from "../../../Store/profileReducer";
 
-export default function Profile(props) {
+type PropsType = {
+  profile: ProfileType;
+  setProfilePhoto: (photo: File) => void;
+  isMyPage: boolean;
+  status: string;
+  setProfileData: (formData: ProfileType) => Promise<{}>;
+  setStatus: (status: string) => void;
+};
+
+const Profile: React.FC<PropsType> = (props) => {
   let { profile } = props;
   let { contacts } = profile;
   const [editMode, setEditMode] = useState(false);
   // загрузка фото профиля на сервер
-  const uploadPhoto = (e) => {
-    props.setProfilePhoto(e.target.files[0]);
+  const uploadPhoto = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length) {
+      props.setProfilePhoto(e.target.files[0]);
+    }
   };
   // редактирование данных пользователя
   const editProfile = () => {
     setEditMode(true);
   };
-  const onSubmit = (formData) => {
+  const onSubmit = (formData: ProfileType) => {
     props.setProfileData(formData).then(() => {
       setEditMode(false);
     });
@@ -41,7 +53,7 @@ export default function Profile(props) {
           {editMode ? (
             <ProfileEditor
               initialValues={profile}
-              contacts={contacts}
+              profile={profile}
               onSubmit={onSubmit}
             />
           ) : (
@@ -56,4 +68,5 @@ export default function Profile(props) {
       </div>
     </div>
   );
-}
+};
+export default Profile;

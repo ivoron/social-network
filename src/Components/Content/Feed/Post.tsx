@@ -1,7 +1,11 @@
 import React from "react";
 import picture from "../../../assets/images/pictcha.jpg";
 
-export default function Post(props) {
+type PropsType = {
+  userName: string
+  postText: string
+}
+export default function Post(props: PropsType) {
   return (
     <div className="postBody">
       <div className="postInfo">

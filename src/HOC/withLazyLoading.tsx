@@ -1,6 +1,6 @@
 import React from "react";
 import Preloader from "../assets/Preloader/Preloader";
-const LazyLoading = (Component) => {
+const LazyLoading = (Component: React.ComponentType) => {
   return (
     <React.Suspense fallback={<Preloader/>}>
       <Component />

@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../Content/Navbar/Navbar";
+import Navbar from "./Navbar/Navbar";
 import Preloader from "../../assets/Preloader/Preloader";
 import ProfilePage from "./Profile/ProfilePage";
 import { Route, withRouter, Redirect, Switch } from "react-router-dom";
@@ -7,17 +7,23 @@ import { initialApp } from "../../Store/appReducer";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import LazyLoading from "../../HOC/withLazyLoading";
+import { AppStateType } from "../../Store/redux-store";
 
 const Login = React.lazy(() => import("./Login/Login"));
 const DialogsContainer = React.lazy(() => import("./Dialogs/DialogsContainer"));
 const UsersContainer = React.lazy(() => import("./Users/UsersContainer"));
 const Page404 = React.lazy(() => import("./Page404"));
 
-class Content extends React.Component {
+type MapPropsType = ReturnType<typeof mapStateToProps>;
+type DispatchPropsType = {
+  initialApp: () => void;
+};
+class Content extends React.Component<MapPropsType & DispatchPropsType> {
   componentDidMount() {
     this.props.initialApp();
   }
-  render() { // инициализация приложения = загрузка данных из API
+  render() {
+    // инициализация приложения = загрузка данных из API
     if (!this.props.appInit) {
       return <Preloader />;
     }
@@ -41,10 +47,10 @@ class Content extends React.Component {
     );
   }
 }
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType) => ({
   appInit: state.app.appInit,
 });
-export default compose(
+export default compose<React.ComponentType>(
   withRouter,
   connect(mapStateToProps, { initialApp })
 )(Content);

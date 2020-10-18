@@ -1,14 +1,6 @@
 import { getUsers, followUser, unfollowUser } from "../API/getApi";
 import { PhotosType } from "./profileReducer";
-import {
-  FOLLOW,
-  UNFOLLOW,
-  SET_USERS,
-  SET_CURRENT_PAGE,
-  SET_TOTAL_COUNT,
-  SET_LOADER,
-  DISABLE_BTN,
-} from "./actionTypes";
+import { InferActionTypes, BaseThunkType } from "./redux-store";
 
 let initialState: InitStateType = {
   users: [
@@ -45,10 +37,10 @@ export type UsersType = {
 
 const usersReducer = (
   state = initialState,
-  action: UnionActionTypes
+  action: ActionTypes
 ): InitStateType => {
   switch (action.type) {
-    case FOLLOW:
+    case "FOLLOW":
       return {
         ...state,
         users: state.users.map((user) => {
@@ -59,7 +51,7 @@ const usersReducer = (
         }),
       };
 
-    case UNFOLLOW:
+    case "UNFOLLOW":
       return {
         ...state,
         users: state.users.map((user) => {
@@ -69,27 +61,27 @@ const usersReducer = (
           return user;
         }),
       };
-    case SET_USERS:
+    case "SET_USERS":
       return {
         ...state,
         users: action.users,
       };
-    case SET_CURRENT_PAGE:
+    case "SET_CURRENT_PAGE":
       return {
         ...state,
         currentPage: action.currentPage,
       };
-    case SET_TOTAL_COUNT:
+    case "SET_TOTAL_COUNT":
       return {
         ...state,
         totalCount: action.totalCount,
       };
-    case SET_LOADER:
+    case "SET_LOADER":
       return {
         ...state,
         isLoading: action.isLoading,
       };
-    case DISABLE_BTN:
+    case "DISABLE_BTN":
       return {
         ...state,
         followFetch: action.isFetching
@@ -101,103 +93,49 @@ const usersReducer = (
       return state;
   }
 };
+type ActionTypes = InferActionTypes<typeof actions>;
+export const actions = {
+  follow: (userID: number) => ({ type: "FOLLOW", userID } as const),
 
-type UnionActionTypes = FollowType &
-  UnfollowType &
-  SetUsersType &
-  SetCurrentPageType &
-  SetTotalCountType &
-  FollowedTogleType &
-  SetLoaderType;
-// c оператором | редьюсер не работает
+  unfollow: (userID: number) => ({ type: "UNFOLLOW", userID } as const),
 
-interface FollowType {
-  type: typeof FOLLOW;
-  userID: number;
-}
-interface UnfollowType {
-  type: typeof UNFOLLOW;
-  userID: number;
-}
-interface SetUsersType {
-  type: typeof SET_USERS;
-  users: Array<UsersType>;
-}
-interface SetCurrentPageType {
-  type: typeof SET_CURRENT_PAGE;
-  currentPage: number;
-}
-interface SetTotalCountType {
-  type: typeof SET_TOTAL_COUNT;
-  totalCount: number;
-}
-interface FollowedTogleType {
-  type: typeof DISABLE_BTN;
-  isFetching: boolean;
-  userID: number;
-}
-interface SetLoaderType {
-  type: typeof SET_LOADER;
-  isLoading: boolean;
-}
+  setUsers: (users: Array<UsersType>) =>
+    ({ type: "SET_USERS", users } as const),
 
-const follow = (userID: number): FollowType => ({
-  type: FOLLOW,
-  userID,
-});
+  setCurrentPage: (currentPage: number) =>
+    ({ type: "SET_CURRENT_PAGE", currentPage } as const),
 
-const unfollow = (userID: number): UnfollowType => ({
-  type: UNFOLLOW,
-  userID,
-});
+  setTotalCount: (totalCount: number) =>
+    ({ type: "SET_TOTAL_COUNT", totalCount } as const),
 
-const setUsers = (users: Array<UsersType>): SetUsersType => ({
-  type: SET_USERS,
-  users,
-});
+  followedToggle: (isFetching: boolean, userID: number) =>
+    ({ type: "DISABLE_BTN", isFetching, userID } as const),
 
-export const setCurrentPage = (currentPage: number): SetCurrentPageType => ({
-  type: SET_CURRENT_PAGE,
-  currentPage,
-});
-
-const setTotalCount = (totalCount: number): SetTotalCountType => ({
-  type: SET_TOTAL_COUNT,
-  totalCount,
-});
-
-const followedToggle = (
-  isFetching: boolean,
-  userID: number
-): FollowedTogleType => ({
-  type: DISABLE_BTN,
-  isFetching,
-  userID,
-});
-
-const setLoader = (isLoading: boolean): SetLoaderType => ({
-  type: SET_LOADER,
-  isLoading,
-});
-
-export const getUsersThunk = (currentPage: number, pageSize: number) => async (
-  dispatch: any
-) => {
-  dispatch(setLoader(true));
-  let data = await getUsers(currentPage, pageSize);
-  dispatch(setUsers(data.items));
-  dispatch(setTotalCount(data.totalCount));
-  dispatch(setLoader(false));
+  setLoader: (isLoading: boolean) =>
+    ({ type: "SET_LOADER", isLoading } as const),
 };
-export const followTrack = (id: number, followed: boolean) => async (
-  dispatch: any
+export const setCurrentPage = actions.setCurrentPage;
+
+type ThunkType = BaseThunkType<ActionTypes>;
+export const getUsersThunk = (
+  currentPage: number,
+  pageSize: number
+): ThunkType => async (dispatch) => {
+  dispatch(actions.setLoader(true));
+  let data = await getUsers(currentPage, pageSize);
+  dispatch(actions.setUsers(data.items));
+  dispatch(actions.setTotalCount(data.totalCount));
+  dispatch(actions.setLoader(false));
+};
+export const followTrack = (id: number, followed: boolean): ThunkType => async (
+  dispatch
 ) => {
-  dispatch(followedToggle(true, id));
+  dispatch(actions.followedToggle(true, id));
   let data = await (followed ? unfollowUser(id) : followUser(id));
   if (data.resultCode === 0) {
-    dispatch(followed ? unfollow(id) : follow(id));
+    dispatch(followed ? actions.unfollow(id) : actions.follow(id));
   }
-  dispatch(followedToggle(false, id));
+  dispatch(actions.followedToggle(false, id));
 };
 
 export default usersReducer;
