@@ -19,7 +19,7 @@ let initialState: InitStateType = {
   followFetch: [], // id юзеров, на которых ушел запрос на подписку
 };
 
-type InitStateType = {
+export type InitStateType = {
   users: Array<UsersType>;
   currentPage: number;
   totalCount: number;

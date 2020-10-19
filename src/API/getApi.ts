@@ -28,7 +28,7 @@ export const followUser = async (id: number) => {
   const response = await axiosFetch.post<FollowType>(url);
   return response.data;
 };
-type FollowType = {
+export type FollowType = {
   resultCode: number;
   messages: Array<string>;
   data: {};
